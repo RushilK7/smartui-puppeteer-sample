@@ -1,0 +1,17 @@
+{
+  "web": {
+    "browsers": [
+      "chrome",
+      "firefox",
+      "safari",
+      "edge"
+    ],
+    "viewports": [
+      [1920, 1080],
+      [1366, 768],
+      [360, 640]
+    ],
+    "waitForPageRender": 50000,
+    "waitForTimeout": 1000
+  }
+}
