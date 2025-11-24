@@ -1,85 +1,101 @@
-# LambdaTest SmartUI: Puppeteer Samples with SDK & LambdaTest Hooks
+# SmartUI SDK Sample for Puppeteer
 
-Welcome to the LambdaTest SmartUI Puppeteer samples repository. This guide provides detailed instructions on integrating Puppeteer with LambdaTest for automated, cloud-based testing, including visual regression testing using SmartUI. Discover how to leverage the power of Puppeteer alongside LambdaTest's extensive testing capabilities to ensure your web applications look and perform their best across a wide range of devices and browsers.
+Welcome to the SmartUI SDK sample for Puppeteer. This repository demonstrates how to integrate SmartUI visual regression testing with Puppeteer.
 
-## Getting Started
+## Repository Structure
+
+```
+smartui-puppeteer-sample/
+├── sdk/
+│   ├── puppeteerCloud.js    # Cloud test
+│   ├── puppeteerLocal.js    # Local test
+│   └── smartui-web.json    # SmartUI config (create with npx smartui config:create)
+└── hooks/                    # Hooks integration examples
+    └── samplePuppeteer.js   # Hooks example
+```
+
+## 1. Prerequisites and Environment Setup
 
 ### Prerequisites
 
-Before you begin, ensure you have the following:
-- An active LambdaTest account. [Sign up here](https://www.lambdatest.com/) if you don't have one.
-- Your LambdaTest Username and Access Key, available in your LambdaTest profile.
+- Node.js installed
+- LambdaTest account credentials (for Cloud tests)
+- Chrome browser (for Local tests)
 
-### Initial Setup
+### Environment Setup
 
-Clone this repository to get started with SmartUI tests using Puppeteer:
-
+**For Cloud:**
 ```bash
-git clone https://github.com/LambdaTest/smartui-puppeteer-sample.git
-cd smartui-puppeteer-sample
+export LT_USERNAME='your_username'
+export LT_ACCESS_KEY='your_access_key'
+export PROJECT_TOKEN='your_project_token'
 ```
 
-Configure your environment with your LambdaTest credentials:
-
+**For Local:**
 ```bash
-export LT_USERNAME="Your LambdaTest Username"
-export LT_ACCESS_KEY="Your LambdaTest Access Key"
-```
-### Settings up SmartUI project
-
-You, need to create a `SmartUI` project at [Lambdatest - SmartUI Web App](https://smartui.lambdatest.com/projects). Now, you need to follow the steps below: 
-1. Click on the `New Project` button on the top right of the webpage.
-2. Select your `Platform type` as `SDK` for running `SDK` sample test below, else you can select `Platform type` as `Web` for running `hooks` sample.
-3. Provide name of your choice for the project.
-4. Now, add `Approvers` who are required to review the changes and approve/reject the results of the tests.
-5. (Optional) You can add `tags` of your choice such as `uat`, `dev` etc..
-6. Click on the `Get Started` button for completing the project creation.
-7. Now, select `NodeJS` setup guide and in the `Step 2` you can find the project token.
-
-### Setting up Project token: 
-Once, you have successfully setup the project for the `SmartUI` and copiec the `Project Token` from the `SmartUI Web App`: 
-
-```bash
-export PROJECT_TOKEN="<Your Copied Project Token to be pasted here>" 
+export PROJECT_TOKEN='your_project_token'
 ```
 
-## Testing with LambdaTest SDK
+## 2. Initial Setup and Dependencies
 
-### Overview
-
-Our sample tests demonstrate navigating to the LambdaTest homepage to verify the page title and conducting a full-page screenshot for visual regression testing.
-
-#### Setup
-
-Navigate to the SDK sample directory and install dependencies:
+### Clone the Repository
 
 ```bash
-cd sdk
+git clone https://github.com/LambdaTest/smartui-puppeteer-sample
+cd smartui-puppeteer-sample/sdk
+```
+
+### Install Dependencies
+
+The repository already includes the required dependencies in `package.json`. Install them:
+
+```bash
 npm install
 ```
 
-#### Using SmartUI with Puppeteer
+**Dependencies included:**
+- `@lambdatest/smartui-cli` - SmartUI CLI
+- `@lambdatest/puppeteer-driver` - SmartUI Puppeteer driver
+- `puppeteer` - Puppeteer framework
 
-LambdaTest's SmartUI SDK enhances your testing with automated visual regression capabilities. Here's how to capture a full-page screenshot:
+### Create SmartUI Configuration
 
+```bash
+npx smartui config:create smartui-web.json
+```
+
+## 3. Steps to Integrate Screenshot Commands into Codebase
+
+The SmartUI screenshot function is already implemented in the repository.
+
+**Cloud Test** (`sdk/puppeteerCloud.js`):
 ```javascript
 const { smartuiSnapshot } = require('@lambdatest/puppeteer-driver');
 
-await smartuiSnapshot(page, "Your_Screenshot_Name");
+await page.goto("https://www.lambdatest.com");
+await smartuiSnapshot(page, "screenshot");
 ```
 
-Replace `"Your_Screenshot_Name"` with a meaningful identifier. Screenshots are stored in LambdaTest for seamless UI comparison over time.
+**Local Test** (`sdk/puppeteerLocal.js`):
+```javascript
+const { smartuiSnapshot } = require('@lambdatest/puppeteer-driver');
 
-### Execution
+await page.goto("https://www.lambdatest.com");
+await smartuiSnapshot(page, "screenshot");
+```
 
-Execute tests locally or on the LambdaTest Automation Cloud grid:
+**Note**: The code is already configured and ready to use. You can modify the URL and screenshot name if needed.
 
-**Local Execution:**
+## 4. Execution and Commands
+
+### Local Execution
+
 ```bash
 npx smartui exec node puppeteerLocal.js
 ```
 
-**Cloud Execution:**
+### Cloud Execution
+
 ```bash
 npx smartui exec node puppeteerCloud.js
 ```
@@ -88,30 +104,27 @@ npx smartui exec node puppeteerCloud.js
 - Local: `npm run smartui-local`
 - Cloud: `npm run smartui-cloud`
 
-Visit our [documentation](https://www.lambdatest.com/support/docs/smartui-puppeteer-sdk/) for comprehensive SDK guides and tutorials.
-
 ## Testing with LambdaTest Hooks
 
-### Overview
+This repository also includes examples for using SmartUI with LambdaTest Hooks integration.
 
-Like the SDK samples, these tests navigate to the LambdaTest homepage for title verification and visual regression via screenshot.
+### Hooks Integration
 
-#### Setup
+**Location:** See the `hooks` folder for hooks integration examples.
 
-Access the Hooks sample directory and prepare your environment:
+**Purpose:** Use LambdaTest's webhook for seamless visual regression testing.
 
+### Hooks Setup Steps
+
+1. Navigate to the hooks directory:
 ```bash
 cd hooks
 npm install
 ```
 
-#### Leveraging SmartUI Webhooks
-
-Use LambdaTest's webhook for seamless visual regression testing. Capture a screenshot with:
-
+2. Use SmartUI hooks in your test:
 ```javascript
 await page.evaluate(() => {
-  // Replace "Your_Screenshot_Name" with the screenshot identifier
   const screenshotName = "Your_Screenshot_Name";
   const lambdatestAction = JSON.stringify({
     action: 'smartui.takeScreenshot',
@@ -121,14 +134,38 @@ await page.evaluate(() => {
 });
 ```
 
-### Running the Tests
-
-Deploy your tests on the LambdaTest Automation grid with:
-
+3. Run the tests:
 ```bash
 npm run single
 ```
 
-## Support and Assistance
+## Test Files
 
-Our dedicated support team is available 24/7 to assist with any questions or challenges you may encounter. Contact us anytime at [support@lambdatest.com](mailto:support@lambdatest.com) for prompt and friendly support.
+### Cloud Test (`sdk/puppeteerCloud.js`)
+
+- Connects to LambdaTest Cloud using Puppeteer
+- Reads credentials from environment variables (`LT_USERNAME`, `LT_ACCESS_KEY`)
+- Takes screenshot with name: `screenshot`
+
+### Local Test (`sdk/puppeteerLocal.js`)
+
+- Runs Puppeteer locally using Chrome
+- Requires Chrome browser installed
+- Takes screenshot with name: `screenshot`
+
+## Configuration
+
+### SmartUI Config (`smartui-web.json`)
+
+Create the SmartUI configuration file using:
+```bash
+npx smartui config:create smartui-web.json
+```
+
+## View Results
+
+After running the tests, visit your SmartUI project dashboard to view the captured screenshots and compare them with baseline builds.
+
+## More Information
+
+For detailed onboarding instructions, see the [SmartUI Puppeteer Onboarding Guide](https://www.lambdatest.com/support/docs/smartui-onboarding-puppeteer/).
