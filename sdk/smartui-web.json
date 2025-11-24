@@ -11,7 +11,17 @@
       [1366, 768],
       [360, 640]
     ],
-    "waitForPageRender": 50000,
-    "waitForTimeout": 1000
-  }
+    "waitForPageRender": 50000
+  },
+  "mobile": {
+    "devices": [
+      "iPhone 14",
+      "Galaxy S24"
+    ],
+    "fullPage": true,
+    "orientation": "portrait"
+  },
+  "waitForTimeout": 1000,
+  "enableJavaScript": false,
+  "allowedHostnames": []
 }
