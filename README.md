@@ -74,15 +74,19 @@ Replace `"Your_Screenshot_Name"` with a meaningful identifier. Screenshots are s
 
 Execute tests locally or on the LambdaTest Automation Cloud grid:
 
-- For local execution:
-  ```bash
-  npm run smartui-local
-  ```
+**Local Execution:**
+```bash
+npx smartui exec node puppeteerLocal.js
+```
 
-- For execution on LambdaTest Automation Cloud:
-  ```bash
-  npm run smartui-cloud
-  ```
+**Cloud Execution:**
+```bash
+npx smartui exec node puppeteerCloud.js
+```
+
+**Note**: You can also use the npm scripts defined in `package.json`:
+- Local: `npm run smartui-local`
+- Cloud: `npm run smartui-cloud`
 
 Visit our [documentation](https://www.lambdatest.com/support/docs/smartui-puppeteer-sdk/) for comprehensive SDK guides and tutorials.
 
