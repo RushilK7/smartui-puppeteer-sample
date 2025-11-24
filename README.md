@@ -315,6 +315,152 @@ After running your hooks-based tests, visit the [LambdaTest Automation Dashboard
 
 Navigate to your SmartUI project in the [SmartUI Dashboard](https://smartui.lambdatest.com/) to see detailed visual regression results.
 
+## Best Practices
+
+### Screenshot Naming
+
+- Use descriptive, unique names for each screenshot
+- Include page/component name and state
+- Avoid special characters
+- Use consistent naming conventions
+
+### When to Take Screenshots
+
+- After critical user interactions
+- Before and after form submissions
+- At different viewport sizes
+- After page state changes
+
+### Puppeteer-Specific Tips
+
+- Use `page.waitForSelector()` before screenshots
+- Wait for network idle: `await page.goto(url, { waitUntil: 'networkidle0' })`
+- Use `page.waitForTimeout()` for animations
+- Take screenshots after interactions complete
+
+### Example: Screenshot After Interaction
+
+```javascript
+await page.goto('https://www.lambdatest.com');
+await page.waitForSelector('#search');
+
+await page.type('#search', 'Puppeteer');
+await page.keyboard.press('Enter');
+await page.waitForSelector('.results');
+
+await smartuiSnapshot(page, "search-results");
+```
+
+## Common Use Cases
+
+### Responsive Testing
+
+```javascript
+const viewports = [
+  { width: 1920, height: 1080, name: 'desktop' },
+  { width: 768, height: 1024, name: 'tablet' },
+  { width: 375, height: 667, name: 'mobile' }
+];
+
+for (const viewport of viewports) {
+  await page.setViewport({ width: viewport.width, height: viewport.height });
+  await page.goto('https://www.lambdatest.com');
+  await smartuiSnapshot(page, `homepage-${viewport.name}`);
+}
+```
+
+## CI/CD Integration
+
+### GitHub Actions Example
+
+```yaml
+name: Puppeteer SmartUI Tests
+
+on: [push, pull_request]
+
+jobs:
+  visual-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: |
+          cd sdk
+          npm ci
+      
+      - name: Run SmartUI tests
+        env:
+          PROJECT_TOKEN: ${{ secrets.SMARTUI_PROJECT_TOKEN }}
+          LT_USERNAME: ${{ secrets.LT_USERNAME }}
+          LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+        run: |
+          cd sdk
+          npx smartui exec node puppeteerCloud.js
+```
+
+## Troubleshooting
+
+### Issue: `Cannot find module '@lambdatest/puppeteer-driver'`
+
+**Solution**: Install dependencies:
+```bash
+cd sdk
+npm install @lambdatest/smartui-cli @lambdatest/puppeteer-driver puppeteer
+```
+
+### Issue: Screenshots not captured
+
+**Solution**:
+1. Verify `PROJECT_TOKEN` is set
+2. Add waits before screenshots
+3. Ensure page is fully loaded
+4. Check for JavaScript errors in console
+
+### Issue: Timeout errors
+
+**Solution**: Increase wait times:
+```javascript
+await page.goto('https://example.com', { 
+  waitUntil: 'networkidle0',
+  timeout: 60000 
+});
+await page.waitForTimeout(2000);
+await smartuiSnapshot(page, "screenshot");
+```
+
+## Configuration Tips
+
+### Optimizing `smartui-web.json`
+
+```json
+{
+  "web": {
+    "browsers": ["chrome", "firefox"],
+    "viewports": [
+      [1920, 1080],
+      [1366, 768],
+      [375, 667]
+    ],
+    "waitForPageRender": 30000,
+    "waitForTimeout": 2000
+  }
+}
+```
+
+## Additional Resources
+
+- [SmartUI Puppeteer Onboarding Guide](https://www.lambdatest.com/support/docs/smartui-onboarding-puppeteer/)
+- [Puppeteer Documentation](https://pptr.dev/)
+- [LambdaTest Puppeteer Documentation](https://www.lambdatest.com/support/docs/puppeteer-testing/)
+- [SmartUI Dashboard](https://smartui.lambdatest.com/)
+- [LambdaTest Community](https://community.lambdatest.com/)
+
 ## Test Files
 
 ### Cloud Test (`sdk/puppeteerCloud.js`)
