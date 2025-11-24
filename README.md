@@ -130,7 +130,7 @@ This repository also includes examples for using SmartUI with LambdaTest Hooks i
 
 **Purpose:** Use LambdaTest's webhook for seamless visual regression testing in Puppeteer tests running on LambdaTest Cloud Grid.
 
-**Documentation:** [LambdaTest Puppeteer Visual Regression Documentation](https://www.lambdatest.com/support/docs/puppeteer-visual-regression/).
+**Documentation:** [LambdaTest Puppeteer Visual Regression Documentation](https://www.lambdatest.com/support/docs/puppeteer-visual-regression-testing/).
 
 ### Hooks Setup Steps
 
